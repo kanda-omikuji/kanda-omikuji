@@ -24,17 +24,24 @@ button:focus-visible{outline:3px solid #c5a45e;outline-offset:4px}
 .opening-message{font-size:19px;line-height:1.9;color:#71532b;margin:26px auto 12px;letter-spacing:.06em}
 .gold-note{font-size:16px;font-weight:bold;color:#9a742b;line-height:1.7;margin:24px 0}
 .ornament{color:#ad8a4d;font-size:24px;letter-spacing:.4em;margin:8px 0}
-.waiting-scene{position:relative;min-height:270px;display:flex;align-items:center;justify-content:center;flex-direction:column;isolation:isolate}
+.waiting-scene{position:relative;min-height:330px;display:flex;align-items:center;justify-content:center;flex-direction:column;isolation:isolate}
 .waiting-scene::before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(211,173,86,.43) 0%,rgba(211,173,86,.15) 35%,rgba(211,173,86,0) 72%);animation:softGlow 1.8s ease-in-out infinite alternate;z-index:-1}
-.waiting-symbol{font-size:52px;color:#b69a5a;animation:float 1.7s ease-in-out infinite alternate}
+.waiting-symbol{font-size:78px;color:#b69a5a;animation:float 1.2s ease-in-out infinite alternate,shine 2s ease-in-out infinite alternate;text-shadow:0 0 20px #e5c77d}
 .loading{padding:12px 0;font-size:19px;letter-spacing:.12em;color:#6f5639}
-.reveal{animation:revealFortune 1.3s ease-out both}
+ .waiting-scene::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 16% 20%,#d6b453 0 3px,transparent 4px),radial-gradient(circle at 80% 22%,#d6b453 0 4px,transparent 5px),radial-gradient(circle at 25% 70%,#d6b453 0 3px,transparent 4px),radial-gradient(circle at 72% 76%,#d6b453 0 3px,transparent 4px),radial-gradient(circle at 50% 12%,#d6b453 0 3px,transparent 4px),radial-gradient(circle at 91% 56%,#d6b453 0 3px,transparent 4px);animation:sparkle 1.3s ease-in-out infinite alternate}
+.waiting-symbol::before{content:"✦";position:absolute;font-size:24px;transform:translate(-35px,-15px);color:#d5a83e}
+.waiting-symbol::after{content:"✧";position:absolute;font-size:29px;transform:translate(15px,28px);color:#d5a83e}
+.reveal{animation:revealFortune 1.2s cubic-bezier(.2,.9,.25,1.15) both}
+.result-glow{position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(circle,rgba(255,231,147,.82) 0%,rgba(245,197,87,.25) 35%,transparent 75%);animation:flash 1.3s ease-out both}
+@keyframes flash{0%{opacity:0;transform:scale(.5)}30%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.5)}}
+@keyframes sparkle{from{opacity:.25;transform:scale(.85) rotate(-8deg)}to{opacity:1;transform:scale(1.08) rotate(8deg)}}
+@keyframes shine{from{filter:brightness(.8)}to{filter:brightness(1.5)}}
 body.show-result .crest,body.show-result .sub,body.show-result .title,body.show-result .line{display:none}
 body.show-result .wrap{padding-top:12px}
 @keyframes softGlow{from{transform:scale(.8);opacity:.55}to{transform:scale(1.25);opacity:1}}
 @keyframes float{from{transform:translateY(5px)}to{transform:translateY(-8px)}}
-@keyframes revealFortune{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-@media(prefers-reduced-motion:reduce){.waiting-scene::before,.waiting-symbol,.reveal{animation:none}}
+@keyframes revealFortune{from{opacity:0;transform:translateY(45px) scale(.78)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.waiting-scene::before,.waiting-scene::after,.waiting-symbol,.reveal,.result-glow{animation:none}}
 </style>
 </head>
 <body>
@@ -52,7 +59,7 @@ body.show-result .wrap{padding-top:12px}
 <p class="note">おみくじは一度だけお引きいただけます。</p>
 </section>
 <section id="waiting" class="hidden" aria-live="polite">
-<div class="waiting-scene"><div class="waiting-symbol" aria-hidden="true">✧</div><p class="loading">福をひらいています…</p></div>
+<div class="waiting-scene"><div class="waiting-symbol" aria-hidden="true">✧</div><p class="loading">本日の福をお届けします…</p></div>
 </section>
 <section id="result" class="hidden">
 <img id="fortune" class="result" alt="おみくじの結果">
@@ -90,12 +97,16 @@ document.getElementById('draw').addEventListener('click',()=>{
     if(failed)return;
     waiting.classList.add('hidden');
     result.classList.remove('hidden');
+    if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const glow=document.createElement('div');glow.className='result-glow';document.body.appendChild(glow);
+      setTimeout(()=>glow.remove(),1400);
+    }
     result.classList.remove('reveal');
     void result.offsetWidth;
     result.classList.add('reveal');
     document.body.classList.add('show-result');
     window.scrollTo(0,0);
-  },1800);
+  },2900);
 });
 document.getElementById('offer').addEventListener('click',()=>{
   result.classList.add('hidden');
