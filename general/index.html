@@ -53,6 +53,31 @@ body.show-result .wrap{padding-top:12px}
 @keyframes burstFade{0%,63%{opacity:1}100%{opacity:0}}
 @keyframes corePulse{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}40%{opacity:1;transform:translate(-50%,-50%) scale(1.3)}100%{opacity:0;transform:translate(-50%,-50%) scale(2.6)}}
 @media(prefers-reduced-motion:reduce){.ray-burst{display:none}}
+/* 共通版おみくじ・上品な和風表紙 */
+body:not(.show-result) .wrap {
+  background: linear-gradient(160deg, #fffdf7, #f7ecd5);
+  border: 5px double #c7a45a;
+  box-shadow: inset 0 0 28px rgba(183, 145, 65, 0.12);
+}
+
+body:not(.show-result) .title {
+  color: #75401e;
+  font-size: clamp(30px, 7vw, 44px);
+  text-shadow: 1px 2px 3px rgba(191, 155, 78, 0.3);
+}
+
+body:not(.show-result) #start {
+  padding: 18px 10px 28px;
+  border-top: 1px solid #d6bb7b;
+  border-bottom: 1px solid #d6bb7b;
+}
+
+body:not(.show-result) #draw {
+  background: linear-gradient(135deg, #a52a2a, #792020);
+  border: 2px solid #d6b46b;
+  box-shadow: 0 5px 15px rgba(120, 55, 30, 0.22);
+  letter-spacing: 0.15em;
+}
 </style>
 </head>
 <body>
